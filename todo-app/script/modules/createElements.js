@@ -27,7 +27,6 @@ const createLabel = () => {
 
 const createBtnSave = () => {
   const btnSave = document.createElement('button');
-
   btnSave.type = 'submit';
   btnSave.classList.add('btn', 'btn-primary', 'me-3');
   btnSave.textContent = 'Сохранить';
@@ -37,7 +36,6 @@ const createBtnSave = () => {
 
 const createBtnClear = () => {
   const btnClear = document.createElement('button');
-
   btnClear.type = 'reset';
   btnClear.classList.add('btn', 'btn-warning');
   btnClear.textContent = 'Очистить';
@@ -45,21 +43,40 @@ const createBtnClear = () => {
   return btnClear;
 };
 
+const btnClear = createBtnClear();
+
 const createForm = () => {
   const form = document.createElement('form');
 
   form.classList.add('d-flex', 'align-items-center', 'mb-3');
   form.append(createLabel());
   form.append(createBtnSave());
-  form.append(createBtnClear());
+  form.append(btnClear);
 
   return form;
 };
+
+const form = createForm();
 
 const createTableBody = () => {
   const tableBody = document.createElement('tbody');
 
   return tableBody;
+};
+
+const tableBody = createTableBody();
+
+const createTHead = () => {
+  const thead = document.createElement('thead');
+  thead.insertAdjacentHTML('afterbegin',
+      `<tr>
+        <th>№</th>
+        <th>Задача</th>
+        <th>Статус</th>
+        <th>Действия</th>
+      </tr>`);
+
+  return thead;
 };
 
 const createRow = (obj) => {
@@ -71,10 +88,10 @@ const createRow = (obj) => {
         <td class="task">${task}</td>
         <td class="status">${status}</td>
         <td>
-          <button class="btn btn-danger">
+          <button class="btn btn-danger me-1">
             Удалить
         </button>
-        <button class="btn btn-success">
+        <button class="btn btn-success me-1">
           Завершить
         </button>
         <button class="btn btn-info">
@@ -82,26 +99,14 @@ const createRow = (obj) => {
         </button>
       </td>`);
 
-  //  Не смогла сюда передать tableBody, в итоге сделала через querySelector. Как было правильно?  
-  document.querySelector('tbody').append(row);
+  tableBody.append(row);
 };
 
 const createTable = () => {
   const table = document.createElement('table');
+
   table.classList.add('table', 'table-hover', 'table-bordered');
-
-  table.insertAdjacentHTML('afterbegin',
-      `<thead>
-        <tr>
-          <th>№</th>
-          <th>Задача</th>
-          <th>Статус</th>
-          <th>Действия</th>
-        </tr>
-      </thead>`);
-
-  const tableBody = createTableBody();
-  table.append(tableBody);
+  table.append(createTHead(), tableBody);
 
   return table;
 };
@@ -115,4 +120,7 @@ const createTableWrapper = () => {
   return wrapperTable;
 };
 
-export { createTitle, createForm, createTableWrapper, createRow, createTableBody };
+export {
+  createTitle, createForm,
+  createTableWrapper, createRow,
+  createTable, tableBody, form, btnClear };

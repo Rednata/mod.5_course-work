@@ -1,65 +1,64 @@
-import { renderTask } from './render.js';
+import { tableBody } from './createElements.js';
 import { getStorageTask, setStorageTask } from './storage.js';
 
-const printStorageTask = (storageTask) => {
-  storageTask.forEach(task => renderTask(task));
-  return (storageTask.length + 1);
+const currentRow = (target) => {
+  const row = target.closest('tr');
+  return row;
 };
 
-const deleteTask = (userName) => {
-  const tableBody = document.querySelector('tbody');
-  tableBody.addEventListener('click', ({target}) => {
-    const del = target.classList.contains('btn-danger');
-    if (del) {
-      
-      const removeID = Number(target.closest('tr').querySelector('.d-none').textContent);
-      
-      const storageTask = getStorageTask(userName);
-      
+const getCurrentRowID = (row) => +(row.querySelector('.d-none').textContent);
 
-      const news = storageTask.filter(elem => {
+const getNewStorageTask = (currentRowID, storageTask) =>
+  storageTask.filter(({ id }) => id !== currentRowID);
 
-        return elem.id !== removeID;
-      });
+const getNewStorageIndexed = (newStorageTask) => {
+  newStorageTask.map((elem, index) => elem.count = index + 1);
+};
 
-      news.map((elem, index) => {
-        
-        elem.count = index + 1;
-
-      });
-
-      setStorageTask(userName, news);
-
-      target.closest('tr').remove();
-      const arrAllTaskIndex = tableBody.querySelectorAll('tr');
-
-      arrAllTaskIndex.forEach((elem, ind) => { 
-
-        elem.firstElementChild.textContent = ind + 1;
-      });
-
-    
-    }
-    
+const changeTaskIndex = () => {
+  const allRowIndex = tableBody.querySelectorAll('tr');
+  allRowIndex.forEach((elem, ind) => {
+    elem.firstElementChild.textContent = ind + 1;
   });
 };
 
-const endTask = () => {
-  const tableBody = document.querySelector('tbody');
+const deleteTask = (userName) => {
   tableBody.addEventListener('click', ({ target }) => {
-    if (target.classList.contains('btn-success')) {
-      const endTaskTableTask = target.closest('tr').querySelector('.task');
-      endTaskTableTask.classList.remove('task');
-      endTaskTableTask.classList.add('text-decoration-line-through');
+    if (target.classList.contains('btn-danger')) {
+      const row = currentRow(target);
+      row.remove();
+      const currentRowID = getCurrentRowID(row);
+      const storageTask = getStorageTask(userName);
+      const newStorageTask = getNewStorageTask(currentRowID, storageTask);
 
-      const endTaskTableStatus = target.closest('tr').querySelector('.status');
-      endTaskTableStatus.textContent = 'Выполнено';
-
-
-
+      getNewStorageIndexed(newStorageTask);
+      setStorageTask(userName, newStorageTask);
+      changeTaskIndex();
     }
-  })
+  });
+};
+
+const changeTaskStatus = (cellTask, cellStatus) => {
+  cellTask.classList.toggle('text-decoration-line-through');
+
+  if (cellTask.closest('.text-decoration-line-through')) {
+    cellStatus.textContent = 'Выполнено';
+  } else {
+    cellStatus.textContent = 'В процессе';
+  }
 }
 
-export { printStorageTask, deleteTask, endTask };
+const completeTask = () => {
+  tableBody.addEventListener('click', ({ target }) => {
+    if (target.classList.contains('btn-success')) {
+      const row = currentRow(target);
+      const cellTask = row.querySelector('.task');
+      const cellStatus = row.querySelector('.status');
+
+      changeTaskStatus(cellTask, cellStatus);
+    }
+  });
+};
+
+export { deleteTask, completeTask };
 
