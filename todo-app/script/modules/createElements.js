@@ -1,16 +1,17 @@
-import { appContainer } from "./render.js";
+const createTitle = () => {
+  const title = document.createElement('h3');
+  title.textContent = 'ToDo or not ToDo?';
 
-const createTitleH3 = () => {
-  const titleH3 = document.createElement('h3');
-  titleH3.textContent = 'ToDo or not ToDo?';
-  return titleH3;
+  return title;
 };
 
 const createInput = () => {
   const input = document.createElement('input');
-  input.type = 'text';
-  input.placeholder = 'ввести задачу';
 
+  input.type = 'text';
+  input.name = 'task';
+  input.required = true;
+  input.placeholder = 'ввести задачу';
   input.classList.add('form-control');
 
   return input;
@@ -26,6 +27,7 @@ const createLabel = () => {
 
 const createBtnSave = () => {
   const btnSave = document.createElement('button');
+
   btnSave.type = 'submit';
   btnSave.classList.add('btn', 'btn-primary', 'me-3');
   btnSave.textContent = 'Сохранить';
@@ -35,6 +37,7 @@ const createBtnSave = () => {
 
 const createBtnClear = () => {
   const btnClear = document.createElement('button');
+
   btnClear.type = 'reset';
   btnClear.classList.add('btn', 'btn-warning');
   btnClear.textContent = 'Очистить';
@@ -53,28 +56,34 @@ const createForm = () => {
   return form;
 };
 
-const createRow = () => {
+const createTableBody = () => {
+  const tableBody = document.createElement('tbody');
+
+  return tableBody;
+};
+
+const createRow = (obj) => {
+  const { id, count, task, status } = obj;
   const row = document.createElement('tr');
   row.insertAdjacentHTML('afterbegin',
-      `<td>1</td>
-        <td class="task">Купить слона</td>
-        <td>В процессе</td><td>
-        <button class="btn btn-danger">
-          Удалить
+      `<td>${count}</td>
+      <td class="d-none">${id}</td>              
+        <td class="task">${task}</td>
+        <td class="status">${status}</td>
+        <td>
+          <button class="btn btn-danger">
+            Удалить
         </button>
         <button class="btn btn-success">
           Завершить
         </button>
+        <button class="btn btn-info">
+          Редактировать
+        </button>
       </td>`);
 
-  return row;
-};
-
-const createTableBody = () => {
-  const tableBody = document.createElement('tbody');
-  tableBody.append(createRow());
-
-  return tableBody;
+  //  Не смогла сюда передать tableBody, в итоге сделала через querySelector. Как было правильно?  
+  document.querySelector('tbody').append(row);
 };
 
 const createTable = () => {
@@ -99,10 +108,11 @@ const createTable = () => {
 
 const createTableWrapper = () => {
   const wrapperTable = document.createElement('div');
+
   wrapperTable.classList.add('table-wrapper');
   wrapperTable.append(createTable());
 
   return wrapperTable;
 };
 
-export { createTitleH3, createForm, createTableWrapper, createRow };
+export { createTitle, createForm, createTableWrapper, createRow, createTableBody };
