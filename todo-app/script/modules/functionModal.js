@@ -1,6 +1,6 @@
 import { getStorageTask, renderStorageTask } from './storage.js';
 import { onSaveBtnClick } from './functionForm.js';
-import { deleteTask } from './functionTable.js';
+import { completeTask, deleteTask, editTask } from './functionTable.js';
 import { login } from './createElements.js';
 
 const formModal = document.querySelector('.formModal');
@@ -31,6 +31,8 @@ const author = () => {
     renderStorageTask(storageTask);
     onSaveBtnClick(userName);
     deleteTask(userName);
+    editTask(userName);
+    completeTask(userName);
     formModal.reset();
   });
 
