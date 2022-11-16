@@ -17,10 +17,24 @@ const createInput = () => {
   return input;
 };
 
+const input = createInput();
+
+const createSelect = () => {
+  const select = document.createElement('select');
+  select.classList.add('me-3');
+
+  select.insertAdjacentHTML('afterbegin',
+      `<option value='table-light'>Обычное</option>
+      <option value='table-warning'>Важное</option>
+      <option value='table-danger'>Срочное</option>`);
+
+  return select;
+};
+
 const createLabel = () => {
   const label = document.createElement('label');
   label.classList.add('form-group', 'me-3', 'mb-0');
-  label.append(createInput());
+  label.append(input);
 
   return label;
 };
@@ -49,9 +63,7 @@ const createForm = () => {
   const form = document.createElement('form');
 
   form.classList.add('d-flex', 'align-items-center', 'mb-3');
-  form.append(createLabel());
-  form.append(createBtnSave());
-  form.append(btnClear);
+  form.append(createLabel(), createSelect(), createBtnSave(), btnClear);
 
   return form;
 };
@@ -111,6 +123,14 @@ const createTable = () => {
   return table;
 };
 
+const createLogin = () => {
+  const login = document.createElement('p');
+  login.classList.add('text-primary', 'fs-5', 'mb-5');
+  return login;
+};
+
+const login = createLogin();
+
 const createTableWrapper = () => {
   const wrapperTable = document.createElement('div');
 
@@ -120,7 +140,39 @@ const createTableWrapper = () => {
   return wrapperTable;
 };
 
+// =========== MODAL =================
+const createModal = () => {
+  const formModal = document.createElement('form');
+  formModal.classList.add('formModal', 'w-100', 'text-center', 'pt-5');
+
+  const title = document.createElement('h2');
+  title.classList.add('mb-5');
+  title.textContent = `You are Wellcome`;
+
+  const label = document.createElement('label');
+  const input = document.createElement('input');
+
+  input.classList.add('inputModal', 'form-control');
+  input.placeholder = 'Введи имя';
+  input.type = 'text';
+  input.name = 'userName';
+  label.append(input);
+
+  const btnAuthor = document.createElement('button');
+  btnAuthor.type = 'submit';
+  btnAuthor.classList.add('btn', 'btn-primary', 'ms-4', 'me-3');
+  btnAuthor.textContent = 'Author';
+
+  formModal.append(title, label, btnAuthor);
+  formModal.insertAdjacentHTML('beforeend',
+      `<button type="button" class="btn-close ms-3" aria-label="Close">
+      </button>`);
+
+  return formModal;
+};
+
 export {
+  tableBody, form, btnClear, login,
   createTitle, createForm,
   createTableWrapper, createRow,
-  createTable, tableBody, form, btnClear };
+  createTable, createModal };

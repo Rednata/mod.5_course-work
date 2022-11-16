@@ -1,23 +1,15 @@
 import { renderApp } from './modules/render.js';
+import { author } from './modules/functionModal.js';
 import { 
-  author,
-  getStorageTask,
-  renderStorageTask } from './modules/storage.js';
-import { onSaveBtnClick } from './modules/functionForm.js';
-import { 
-  deleteTask,
   completeTask,
+  editTask
 } from './modules/functionTable.js';
 
-
 const init = () => {
-  const userName = author();
+  author();
   renderApp();
-  const storageTask = getStorageTask(userName);
-  renderStorageTask(storageTask);
-  onSaveBtnClick(userName);
-  deleteTask(userName);
   completeTask();
+  editTask();
 };
 
 init();

@@ -22,18 +22,22 @@ const changeTaskIndex = () => {
   });
 };
 
+const confirmRemoveTask = () => confirm('Точно хотите удалить задание?');
+
 const deleteTask = (userName) => {
   tableBody.addEventListener('click', ({ target }) => {
     if (target.classList.contains('btn-danger')) {
-      const row = currentRow(target);
-      row.remove();
-      const currentRowID = getCurrentRowID(row);
-      const storageTask = getStorageTask(userName);
-      const newStorageTask = getNewStorageTask(currentRowID, storageTask);
+      if (confirmRemoveTask()) {
+        const row = currentRow(target);
+        row.remove();
+        const currentRowID = getCurrentRowID(row);
+        const storageTask = getStorageTask(userName);
+        const newStorageTask = getNewStorageTask(currentRowID, storageTask);
 
-      getNewStorageIndexed(newStorageTask);
-      setStorageTask(userName, newStorageTask);
-      changeTaskIndex();
+        getNewStorageIndexed(newStorageTask);
+        setStorageTask(userName, newStorageTask);
+        changeTaskIndex();
+      }
     }
   });
 };
@@ -60,5 +64,31 @@ const completeTask = () => {
   });
 };
 
-export { deleteTask, completeTask };
+const makeCellTaskStyle = (cellTask) => {
+  cellTask.style.caretColor = 'red';
+  cellTask.style.backgroundColor = 'rgba(13, 202, 240, 0.3)';
+
+};
+
+const backCellTaskStyle = (cellTask) => {
+  cellTask.addEventListener('blur', () => {
+    cellTask.style.backgroundColor = '#ffffff';
+    cellTask.setAttribute('contenteditable', false);
+  });
+};
+
+const editTask = (userName) => {
+  tableBody.addEventListener('click', ({ target } ) => {
+    if (target.classList.contains('btn-info')) {
+      const row = currentRow(target);
+      const cellTask = row.querySelector('.task');
+      cellTask.setAttribute('contenteditable', true);
+
+      makeCellTaskStyle(cellTask);
+      backCellTaskStyle(cellTask);
+    }
+  });
+};
+
+export { deleteTask, completeTask, editTask };
 
