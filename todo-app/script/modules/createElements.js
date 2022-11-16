@@ -10,7 +10,6 @@ const createInput = () => {
 
   input.type = 'text';
   input.name = 'task';
-  input.required = true;
   input.placeholder = 'ввести задачу';
   input.classList.add('form-control');
 
@@ -42,8 +41,9 @@ const createLabel = () => {
 const createBtnSave = () => {
   const btnSave = document.createElement('button');
   btnSave.type = 'submit';
-  btnSave.classList.add('btn', 'btn-primary', 'me-3');
+  btnSave.classList.add('btn', 'btn-primary', 'me-3', 'btn-save');
   btnSave.textContent = 'Сохранить';
+  btnSave.disabled = true;
 
   return btnSave;
 };
@@ -91,12 +91,31 @@ const createTHead = () => {
   return thead;
 };
 
-const createRow = (obj) => {
+const createRow = (obj) => {  
   const { id, count, task, status } = obj;
   const row = document.createElement('tr');
-  row.insertAdjacentHTML('afterbegin',
-      `<td>${count}</td>
-      <td class="d-none">${id}</td>              
+
+  if (obj.finished) {
+    row.insertAdjacentHTML('afterbegin',
+        `<td>${count}</td>
+        <td class="d-none">${id}</td>  
+        <td class="task text-decoration-line-through">${task}</td>  
+        <td class="status">${status}</td>
+        <td>
+          <button class="btn btn-danger me-1">
+            Удалить
+        </button>
+        <button class="btn btn-success me-1">
+          Завершить
+        </button>
+        <button class="btn btn-info">
+          Редактировать
+        </button>
+        </td>`);
+  } else {
+    row.insertAdjacentHTML('afterbegin',
+        `<td>${count}</td>
+        <td class="d-none">${id}</td>              
         <td class="task">${task}</td>
         <td class="status">${status}</td>
         <td>
@@ -109,7 +128,11 @@ const createRow = (obj) => {
         <button class="btn btn-info">
           Редактировать
         </button>
-      </td>`);
+        </td>`);
+  }
+
+  
+  
 
   tableBody.append(row);
 };
