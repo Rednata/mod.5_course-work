@@ -110,6 +110,7 @@ const editTask = (userName) => {
 
       makeCellTaskStyle(cellTask);
       backCellTaskStyle(cellTask);
+    };
   });
 };
 
