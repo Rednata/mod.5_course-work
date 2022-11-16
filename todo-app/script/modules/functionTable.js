@@ -42,7 +42,7 @@ const deleteTask = (userName) => {
   });
 };
 
-const changeTaskStatus = (cellTask, cellStatus) => {
+const changeTaskComplete = (cellTask, cellStatus) => {
   cellTask.classList.toggle('text-decoration-line-through');
 
   if (cellTask.closest('.text-decoration-line-through')) {
@@ -50,16 +50,40 @@ const changeTaskStatus = (cellTask, cellStatus) => {
   } else {
     cellStatus.textContent = 'В процессе';
   }
-}
+};
 
-const completeTask = () => {
+const completeTaskFinished = (currentCompleteTask) => {
+  currentCompleteTask.finished = true;
+  currentCompleteTask.status = 'Выполнено';
+};
+
+const completeTaskDo = (currentCompleteTask) => {
+  currentCompleteTask.finished = false;
+  currentCompleteTask.status = 'В процессе';
+};
+
+const changeStorageComplete = (storageTask, currentRowID, cellTask, userName) => {
+  const currentCompleteTask = storageTask.find(elem =>
+    elem.id === currentRowID);
+  if (cellTask.closest('.text-decoration-line-through')) {
+    completeTaskFinished(currentCompleteTask);
+  } else {
+    completeTaskDo(currentCompleteTask);
+  }
+  setStorageTask(userName, storageTask);
+};
+
+const completeTask = (userName) => {
   tableBody.addEventListener('click', ({ target }) => {
     if (target.classList.contains('btn-success')) {
       const row = currentRow(target);
       const cellTask = row.querySelector('.task');
       const cellStatus = row.querySelector('.status');
+      const currentRowID = getCurrentRowID(row);
+      const storageTask = getStorageTask(userName);
 
-      changeTaskStatus(cellTask, cellStatus);
+      changeTaskComplete(cellTask, cellStatus);
+      changeStorageComplete(storageTask, currentRowID, cellTask, userName);
     }
   });
 };
@@ -78,7 +102,7 @@ const backCellTaskStyle = (cellTask) => {
 };
 
 const editTask = (userName) => {
-  tableBody.addEventListener('click', ({ target } ) => {
+  tableBody.addEventListener('click', ({ target }) => {
     if (target.classList.contains('btn-info')) {
       const row = currentRow(target);
       const cellTask = row.querySelector('.task');
@@ -86,7 +110,6 @@ const editTask = (userName) => {
 
       makeCellTaskStyle(cellTask);
       backCellTaskStyle(cellTask);
-    }
   });
 };
 
